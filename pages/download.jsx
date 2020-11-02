@@ -57,8 +57,8 @@ export default function Download({reasons, user}) {
                         {reasons.map(r => (<option value={r.code} key={r.code}>{format(r.code)}</option>))}
                     </select>
                 </div>
-                <p>{reasons.find(r => r.code === code).label}</p>
-                <Button onClick={() => dl()} intent={Intent.PRIMARY}>Générer</Button>
+                <p dangerouslySetInnerHTML={{__html: reasons.find(r => r.code === code).label}}/>
+                <Button icon="document" onClick={() => dl()} intent={Intent.PRIMARY}>Générer</Button>
             </Card>
         </div>
     </Body>;
