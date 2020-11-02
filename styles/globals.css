@@ -4,6 +4,13 @@ body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+
+  background-color: #30404d;
+
+  width: 100vw;
+  height: 100vh;
+  max-width: 100vw;
+  overflow-x: hidden;
 }
 
 a {
@@ -13,4 +20,46 @@ a {
 
 * {
   box-sizing: border-box;
+}
+
+#__next {
+  height: 100%;
+  padding-top: 50px;
+}
+
+#__next .bp3-navbar {
+  position: fixed;
+  top: 0;
+}
+
+#__next .bp3-navbar img {
+  max-width: 35px;
+  max-height: 35px;
+  border-radius: 5px;
+}
+
+.fh {
+  height: 100%;
+}
+
+.wrapperCenter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+#settings {
+  margin-top: 2rem;
+  min-width: 300px;
+}
+
+.text-center {
+  text-align: center;
+}
+
+
+.card {
+  width: 400px;
+  cursor: pointer;
 }
