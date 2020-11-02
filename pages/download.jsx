@@ -39,9 +39,8 @@ export default function Download({reasons, user}) {
             }, code, 'certificate.pdf');
 
             const link = document.createElement('a')
-            const url = URL.createObjectURL(blob);
-            link.href = url;
-            link.download = 'test.pdf';
+            link.href = URL.createObjectURL(blob);
+            link.download = 'attestation_' + Date.now() + '.pdf';
             document.body.appendChild(link)
             link.click();
         }
