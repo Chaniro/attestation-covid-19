@@ -61,6 +61,7 @@ a {
 
 .card {
   width: 400px;
+  max-width: 90%;
 }
 
 #__next .bp3-select {
