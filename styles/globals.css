@@ -62,3 +62,7 @@ a {
 .card {
   width: 400px;
 }
+
+#__next .bp3-select {
+  margin: 1rem 0;
+}
