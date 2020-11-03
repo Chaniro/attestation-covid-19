@@ -8,6 +8,7 @@ import {Button, Card, Classes, Elevation, Intent} from "@blueprintjs/core";
 import Loading from "../components/Loading";
 import Body from "../components/Body";
 import Header from "../components/Header";
+import {useRouter} from 'next/router';
 
 const {useState} = require("react");
 const prisma = new PrismaClient();
@@ -16,19 +17,22 @@ const format = c => c.substr(0, 1).toUpperCase() +
     c.substr(1).replace('_', ' ').toLowerCase();
 
 export default function Download({reasons, user}) {
+    const router = useRouter();
     const [session, loading] = useSession();
     const [code, setCode] = useState(reasons[0].code);
+    const [generating, setGenerating] = useState(false);
 
     useEffect(async () => {
         if (loading)
             return;
 
         if (!session)
-            return signIn();
+            await router.push('/login');
     }, [session]);
 
     const dl = async () => {
         if (typeof window !== 'undefined') {
+            setGenerating(true);
             const blob = await generatePdf({
                 ...user,
                 datesortie: new Date().toLocaleDateString('fr-FR'),
@@ -43,6 +47,7 @@ export default function Download({reasons, user}) {
             link.download = 'attestation_' + Date.now() + '.pdf';
             document.body.appendChild(link)
             link.click();
+            setGenerating(false);
         }
     }
 
@@ -57,7 +62,7 @@ export default function Download({reasons, user}) {
                     </select>
                 </div>
                 <p dangerouslySetInnerHTML={{__html: reasons.find(r => r.code === code).label}}/>
-                <Button icon="document" onClick={() => dl()} intent={Intent.PRIMARY}>Générer</Button>
+                <Button icon="document" onClick={() => dl()} loading={generating} intent={Intent.PRIMARY}>Générer</Button>
             </Card>
         </div>
     </Body>;
@@ -66,7 +71,7 @@ export default function Download({reasons, user}) {
 export async function getServerSideProps({req, res}) {
     const session = await getSession({req});
     if (!session) {
-        res.writeHead(302, {Location: '/api/auth/signin'});
+        res.writeHead(302, {Location: '/login'});
         res.end();
         return {props: {}};
     }

@@ -103,7 +103,7 @@ export default function Settings({u}) {
 export async function getServerSideProps({req, res}) {
     const session = await getSession({req});
     if (!session) {
-        res.writeHead(302, {Location: '/api/auth/signin'});
+        res.writeHead(302, {Location: '/login'});
         res.end();
         return {props: {}};
     }

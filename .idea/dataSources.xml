@@ -7,11 +7,17 @@
       <jdbc-driver>org.postgresql.Driver</jdbc-driver>
       <jdbc-url>jdbc:postgresql://localhost:5432/covid</jdbc-url>
     </data-source>
-    <data-source source="LOCAL" name="d9k3criqk2raoi@ec2-54-146-4-66.compute-1.amazonaws.com" uuid="96f639bd-fc42-4b28-a601-090bf1169b8e">
+    <data-source source="LOCAL" name="Heroku" uuid="96f639bd-fc42-4b28-a601-090bf1169b8e">
       <driver-ref>postgresql</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.postgresql.Driver</jdbc-driver>
-      <jdbc-url>jdbc:postgresql://ec2-54-146-4-66.compute-1.amazonaws.com:5432/d9k3criqk2raoi</jdbc-url>
+      <jdbc-url>jdbc:postgresql://ec2-46-137-123-136.eu-west-1.compute.amazonaws.com:5432/d2e9rlfvh052ag</jdbc-url>
+    </data-source>
+    <data-source source="LOCAL" name="postgres@localhost" uuid="575db4cc-818c-44e1-8eb6-e05fb20199e9">
+      <driver-ref>postgresql</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
+      <jdbc-url>jdbc:postgresql://localhost:5432/postgres</jdbc-url>
     </data-source>
   </component>
 </project>

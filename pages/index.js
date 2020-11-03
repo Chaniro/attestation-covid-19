@@ -14,7 +14,7 @@ export async function getServerSideProps({req, res}) {
 
     let redirectTo = '/download';
     if (!user)
-        redirectTo = '/api/auth/signin';
+        redirectTo = '/login';
     else if (!user.address || user.address.trim() === '')
         redirectTo = '/settings';
 
