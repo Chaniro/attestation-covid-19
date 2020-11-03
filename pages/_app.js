@@ -10,7 +10,7 @@ function MyApp({ Component, pageProps }) {
   return (
       <Provider session={pageProps.session}>
           <Head>
-              <title>Attestation</title>
+              <title>Attestation COVID-19</title>
 
               <meta charSet='utf-8'/>
               <meta http-equiv='X-UA-Compatible' content='IE=edge'/>
