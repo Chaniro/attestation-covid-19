@@ -2,7 +2,7 @@
 	"short_name": "Attestation",
 	"name": "Attestation",
 	"lang": "fr",
-	"start_url": "/",
+	"start_url": "https://attestation-covid-19.herokuapp.com",
 	"background_color": "#30404d",
 	"theme_color": "#30404d",
 	"dir": "ltr",
