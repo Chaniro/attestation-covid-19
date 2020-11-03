@@ -43,6 +43,8 @@ export default function Download({reasons, user, direct}) {
                     .join(''),
             }, t, r, 'certificate.pdf');
 
+            await fetch('/api/generate');
+
             const link = document.createElement('a')
             link.href = URL.createObjectURL(blob);
             link.download = 'attestation_' + Date.now() + '.pdf';

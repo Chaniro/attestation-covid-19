@@ -55,6 +55,7 @@ model User {
   address       String?
   zipcode       String?
   city          String?
+  generated     Int?       @default(0)
 
   @@map(name: "users")
 }
