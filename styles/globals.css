@@ -67,3 +67,12 @@ a {
 #__next .bp3-select {
   margin: 1rem 0;
 }
+
+#__next .mr-0 {
+  margin-right: 0;
+}
+
+body .bp3-alert-footer {
+  flex-direction: row;
+  justify-content: flex-end;
+}
