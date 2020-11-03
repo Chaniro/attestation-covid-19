@@ -55,8 +55,8 @@ export default function Header({user}) {
             </Navbar.Group>
             <Navbar.Group align={Alignment.RIGHT}>
                 <div className="styleSwapper">
-                    <Switch innerLabel="🌛"
-                            innerLabelChecked="☀"
+                    <Switch innerLabel="☀"
+                            innerLabelChecked="🌛"
                             large={true}
                             checked={dark}
                             onChange={onChange}/>
