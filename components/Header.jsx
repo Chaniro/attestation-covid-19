@@ -1,11 +1,27 @@
 import React, {useState} from 'react';
-import {Alignment, Button, Navbar, Classes, Intent, Alert, Card} from '@blueprintjs/core';
+import {Alert, Alignment, Button, Classes, Intent, Navbar, Switch} from '@blueprintjs/core';
 import {useRouter} from 'next/router';
 import {signOut} from 'next-auth/client'
+
+const {useEffect} = require("react");
+
+const DARK = 'DARK';
 
 export default function Header({user}) {
     const router = useRouter();
     const [open, setOpen] = useState(false);
+    const [dark, setDark] = useState(false);
+
+    useEffect(() => {
+        const d = localStorage.getItem(DARK) === 'true' || false;
+        setDark(localStorage.getItem(DARK) === 'true' || false);
+
+        const elem = document.getElementById('main');
+        if(d)
+            elem.classList.add('bp3-dark');
+        else
+            elem.classList.remove('bp3-dark');
+    }, [dark]);
 
     const deleteUser = async () => {
         const requestOptions = {
@@ -16,10 +32,14 @@ export default function Header({user}) {
         const res = await fetch('/api/user', requestOptions);
         if (res.status === 200) {
             signOut();
-        }
-        else {
+        } else {
             setOpen(false);
         }
+    }
+
+    const onChange = e => {
+        setDark(e.target.checked);
+        localStorage.setItem(DARK, e.target.checked);
     }
 
     return (
@@ -34,6 +54,16 @@ export default function Header({user}) {
                 </Navbar.Heading>
             </Navbar.Group>
             <Navbar.Group align={Alignment.RIGHT}>
+                <div className="styleSwapper">
+                    <Switch innerLabel="🌛"
+                            innerLabelChecked="☀"
+                            large={true}
+                            checked={dark}
+                            onChange={onChange}/>
+                </div>
+
+                <Navbar.Divider/>
+
                 <Button className={Classes.MINIMAL} icon="cog" onClick={() => router.push('/settings')}/>
                 <Button className={Classes.MINIMAL} intent={Intent.DANGER} icon="trash" onClick={() => setOpen(true)}/>
 
