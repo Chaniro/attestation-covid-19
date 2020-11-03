@@ -1,10 +1,11 @@
 import React from "react";
 import fs from "fs";
+import url from "url";
 import path from "path";
 import {generatePdf} from "../lib/pdf-util";
-import {getSession, signIn, useSession} from 'next-auth/client'
+import {getSession, useSession} from 'next-auth/client'
 import {PrismaClient} from "@prisma/client";
-import {Button, Card, Classes, Elevation, Intent} from "@blueprintjs/core";
+import {Button, Card, Classes, Elevation, Intent, Position, Toaster} from "@blueprintjs/core";
 import Loading from "../components/Loading";
 import Body from "../components/Body";
 import Header from "../components/Header";
@@ -16,7 +17,7 @@ const {useEffect} = require("react");
 const format = c => c.substr(0, 1).toUpperCase() +
     c.substr(1).replace('_', ' ').toLowerCase();
 
-export default function Download({reasons, user}) {
+export default function Download({reasons, user, direct}) {
     const router = useRouter();
     const [session, loading] = useSession();
     const [code, setCode] = useState(reasons[0].code);
@@ -30,17 +31,17 @@ export default function Download({reasons, user}) {
             await router.push('/login');
     }, [session]);
 
-    const dl = async () => {
+    const dl = async (r, t) => {
         if (typeof window !== 'undefined') {
             setGenerating(true);
             const blob = await generatePdf({
                 ...user,
-                datesortie: new Date().toLocaleDateString('fr-FR'),
+                datesortie: t.toLocaleDateString('fr-FR'),
                 heuresortie: Intl.DateTimeFormat('fr', {hour: 'numeric', minute: 'numeric'})
-                    .formatToParts(new Date())
+                    .formatToParts(t)
                     .map(v => v.value)
                     .join(''),
-            }, code, 'certificate.pdf');
+            }, t, r, 'certificate.pdf');
 
             const link = document.createElement('a')
             link.href = URL.createObjectURL(blob);
@@ -48,8 +49,22 @@ export default function Download({reasons, user}) {
             document.body.appendChild(link)
             link.click();
             setGenerating(false);
+
+            Toaster.create({position: Position.TOP}).show({
+                intent: Intent.SUCCESS,
+                message: "L'attestation a été téléchargée !"
+            });
         }
     }
+
+    useEffect(async () => {
+        if (!!direct.r && !!direct.t && !!reasons.find(r => r.code === direct.r) &&
+            !isNaN(parseInt(direct.t)) && !loading && !!session) {
+            await dl(direct.r, new Date(Date.now() - parseInt(direct.t) * 60 * 1000));
+            await router.push('/download');
+        }
+    }, [direct, loading, session]);
+
 
     return loading ? <Loading/> : <Body>
         <Header user={user}/>
@@ -62,7 +77,8 @@ export default function Download({reasons, user}) {
                     </select>
                 </div>
                 <p dangerouslySetInnerHTML={{__html: reasons.find(r => r.code === code).label}}/>
-                <Button icon="document" onClick={() => dl()} loading={generating} intent={Intent.PRIMARY}>Générer</Button>
+                <Button icon="document" onClick={() => dl(code, new Date())} loading={generating}
+                        intent={Intent.PRIMARY}>Générer</Button>
             </Card>
         </div>
     </Body>;
@@ -79,6 +95,7 @@ export async function getServerSideProps({req, res}) {
     const reasonsPath = path.join(process.cwd(), 'lib', 'reasons.json');
     const reasons = JSON.parse(fs.readFileSync(reasonsPath).toString());
     const user = await prisma.user.findOne({where: {email: session.user.email}});
+    const queryData = url.parse(req.url, true).query;
 
     if (!user.address || user.address.trim() === '') {
         res.writeHead(302, {Location: '/settings'});
@@ -89,6 +106,10 @@ export async function getServerSideProps({req, res}) {
     return {
         props: {
             reasons,
+            direct: {
+                r: queryData?.r || null,
+                t: queryData?.t || null
+            },
             user: {
                 image: user?.image || '',
                 lastname: user?.lastname || '',
