@@ -18,9 +18,7 @@ const options = {
         createUser: async (message) => { console.log('createUser', message) },
         error: async (message) => { console.log('error', message) }
     },
-    session: {
-        updateAge: 0
-    }
+    debug: process.env.DEBUG === 'true' || false,
 }
 
 export default (req, res) => NextAuth(req, res, options)
