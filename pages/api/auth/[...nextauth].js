@@ -12,7 +12,8 @@ const options = {
             clientSecret: process.env.GOOGLE_CLIENT_SECRET
         })
     ],
-    adapter: Adapters.Prisma.Adapter({ prisma })
+    adapter: Adapters.Prisma.Adapter({ prisma }),
+    secret: process.env.SECRET || "dev_secret"
 }
 
 export default (req, res) => NextAuth(req, res, options)
