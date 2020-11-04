@@ -13,7 +13,14 @@ const options = {
         })
     ],
     adapter: Adapters.Prisma.Adapter({ prisma }),
-    secret: process.env.SECRET || "dev_secret"
+    secret: process.env.SECRET || "dev_secret",
+    events: {
+        createUser: async (message) => { console.log('createUser', message) },
+        error: async (message) => { console.log('error', message) }
+    },
+    session: {
+        updateAge: 0
+    }
 }
 
 export default (req, res) => NextAuth(req, res, options)
